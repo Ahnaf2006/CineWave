@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tickets - CineWave</title>
+    <style>
+        :root {
+            --bg-main: #07080a;
+            --bg-card: rgba(20, 26, 36, 0.9);
+            --bg-input: #11151c;
+            --accent-red: #e50914;
+            --accent-red-hover: #f6121d;
+            --accent-glow: rgba(229, 9, 20, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #d1d5db;
+            --border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        @keyframes pageGlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at 50% 20%, #161b22 0%, #0b0c10 60%, #050608 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            animation: pageGlideIn 0.4s ease forwards;
+        }
+
+        header {
+            background: rgba(11, 12, 16, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo span {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav ul li a.active {
+            color: var(--text-primary);
+            background-color: var(--accent-red);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        main {
+            max-width: 1200px;
+            width: 100%;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-red);
+            border-radius: 2px;
+            margin-top: 8px;
+        }
+
+        .booking-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 650px;
+            margin: 0 auto;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .btn-submit {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            background-color: var(--accent-red);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 0.9rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-red-hover);
+            transform: translateY(-2px);
+        }
+
+        #confirmation-box {
+            display: none;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-red);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 650px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+        }
+
+        .sms-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1a1a1a;
+            border-left: 5px solid var(--accent-red);
+            color: #ffffff;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.7);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transform: translateY(150%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .sms-toast.show { transform: translateY(0); }
+        .sms-title { font-weight: 700; font-size: 0.85rem; color: var(--accent-red); text-transform: uppercase; }
+        .sms-body { font-size: 0.95rem; color: var(--text-secondary); }
+
+        footer {
+            background-color: rgba(7, 8, 10, 0.95);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo"><span>CineWave</span></a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="movies.html">Movies</a></li>
+                <li><a href="booking.html" class="active">Book Tickets</a></li>
+                <li><a href="recommend.html">Recommendations</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="watchlist.html">Watchlist</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Book Your Movie Tickets</h1>
+        
+        <form id="bookingForm" class="booking-form" onsubmit="handleBooking(event)">
+            <div class="form-group">
+                <label for="movie">Select Movie:</label>
+                <select id="movie" name="movie" required>
+                    <option value="">-- Please select a movie --</option>
+                    <option value="3 Idiots">3 Idiots</option>
+                    <option value="Interstellar">Interstellar</option>
+                    <option value="The Nun">The Nun</option>
+                    <option value="The Incredibles">The Incredibles</option>
+                    <option value="Get Out">Get Out</option>
+                    <option value="Finlay Kane">Finlay Kane</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="tickets">Number of Tickets:</label>
+                <input type="number" id="tickets" name="tickets" min="1" max="10" value="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Screening Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fullname">Full Name:</label>
+                <input type="text" id="fullname" name="fullname" placeholder="John Doe" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Mobile Phone Number (for instant SMS):</label>
+                <input type="tel" id="phone" name="phone" placeholder="0412 345 678" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Confirm Booking</button>
+        </form>
+
+        <div id="confirmation-box">
+            <h2>🎉 Booking Confirmed!</h2>
+            <p style="margin-top: 1rem;">Thank you, <span id="conf-name" style="color: #fff; font-weight: bold;"></span>!</p>
+            <p>Your seats for <span id="conf-movie" style="color: var(--accent-red); font-weight: bold;"></span> have been reserved for <span id="conf-date" style="color: #fff; font-weight: bold;"></span>.</p>
+            <button onclick="resetBookingForm()" class="btn-submit" style="width: auto; margin-top: 1.5rem; padding: 0.7rem 1.5rem;">Book Another Ticket</button>
+        </div>
+    </main>
+
+    <div id="smsToast" class="sms-toast">
+        <span class="sms-title">💬 Message from CineWave</span>
+        <span class="sms-body" id="smsText">Ticket confirmed! Enjoy your movie!</span>
+    </div>
+
+    <script>
+        function handleBooking(e) {
+            e.preventDefault();
+            const movie = document.getElementById('movie').value;
+            const tickets = document.getElementById('tickets').value;
+            const date = document.getElementById('date').value;
+            const name = document.getElementById('fullname').value;
+
+            document.getElementById('conf-name').textContent = name;
+            document.getElementById('conf-movie').textContent = `${movie} (${tickets} ticket${tickets > 1 ? 's' : ''})`;
+            document.getElementById('conf-date').textContent = date;
+
+            document.getElementById('bookingForm').style.display = 'none';
+            document.getElementById('confirmation-box').style.display = 'block';
+
+            const smsToast = document.getElementById('smsToast');
+            const smsText = document.getElementById('smsText');
+            smsText.textContent = `Hi ${name}, your booking for ${movie} on ${date} is confirmed! Ref: #CW-${Math.floor(1000 + Math.random() * 9000)}`;
+            
+            smsToast.classList.add('show');
+            setTimeout(() => { smsToast.classList.remove('show'); }, 6000);
+        }
+
+        function resetBookingForm() {
+            document.getElementById('bookingForm').reset();
+            document.getElementById('bookingForm').style.display = 'block';
+            document.getElementById('confirmation-box').style.display = 'none';
+        }
+    </script>
+
+    <footer>
+        <p>&copy; 2026 CineWave. All rights reserved.</p>
+    </footer>
+</body>
+</html>
